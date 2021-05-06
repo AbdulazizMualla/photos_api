@@ -42,7 +42,7 @@ class AuthController extends Controller
             return response()->json(['message' => 'invalid login details'] , 401);
         }
 
-        $accessToken = auth()->user()->crateToken('authToken')->accessToken;
+        $accessToken = auth()->user()->createToken('authToken')->accessToken;
         if ($accessToken){
             return ['user' =>  new UserResource(auth()->user()->load('profile')) , 'access_token' => $accessToken];
         }
