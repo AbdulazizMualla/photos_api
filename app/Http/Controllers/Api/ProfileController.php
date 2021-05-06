@@ -20,6 +20,10 @@ class ProfileController extends Controller
 
    public function store(Request $request)
    {
+       $validateData = $request->validate([
+           'name' => 'required',
+           'email' => 'required|unique:users,email,'.auth()->id()
+       ]);
        $user = auth()->user();
 
        $userUpdate = $user->update($request->only('name' , 'email'));
@@ -28,6 +32,7 @@ class ProfileController extends Controller
        }
 
        $profile = $user->profile;
+
 
        if (!$request->description && $request->file('file') == null){
            if ($profile && !$profile->file_name){
@@ -47,13 +52,10 @@ class ProfileController extends Controller
            }
        }
 
+       $validateData = $request->validate([
+           'file' => 'required|max:5000|mimes:jpg,jpeg,png'
+       ]);
 
-        $v = Validator::make($request->all() , [
-             'file' => 'required|max:5000|mimes:jpg,jpeg,png'
-        ]);
-        if ($v->fails()){
-            return response()->json($v->errors() , 422);
-        }
 
        Storage::deleteDirectory('public/users/'.$user->id);
        $fileName = $request->file('file')->hashName();

@@ -20,6 +20,12 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/register' , 'App\Http\Controllers\Api\AuthController@register');
 Route::post('/login' , 'App\Http\Controllers\Api\AuthController@login');
-
-
 Route::post('/profile' , 'App\Http\Controllers\Api\ProfileController@store');
+
+Route::get('/photos' , 'App\Http\Controllers\Api\PhotoController@index');
+
+Route::post('/photos' , 'App\Http\Controllers\Api\PhotoController@store');
+
+Route::get('/my-photos' , 'App\Http\Controllers\Api\PhotoController@myPhotos');
+
+Route::delete('/my-photos/{photo}' , 'App\Http\Controllers\Api\PhotoController@destroy');
