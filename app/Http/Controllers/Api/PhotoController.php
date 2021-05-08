@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\PhotoResource;
+use App\Http\Resources\UserResource;
 use App\Models\Photo;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
 
 class PhotoController extends Controller
 {
@@ -16,7 +18,7 @@ class PhotoController extends Controller
 
     public function index()
     {
-        $photos = Photo::with('user.profile')->paginate(1);
+        $photos = Photo::with('user.profile')->paginate(100);
         return PhotoResource::collection($photos);
 
     }
@@ -45,11 +47,21 @@ class PhotoController extends Controller
 
     public function myPhotos()
     {
+        $user = auth()->user();
+        $user['profile'] = $user->profile;
+        return response()->json(['user' => new UserResource($user->load('photos'))]);
 
     }
 
     public function destroy(Photo $photo)
     {
+        if (auth()->id() != $photo->user_id){
+            return response()->json(['message' => 'You don\'t have one this resource'] , 401);
+        }
+        if ($photo->delete()){
+            return response()->json(['message' => 'resource deleted']);
+        }
+        return response()->json(['message' => 'Error, try aging later'] , 500);
 
     }
 }

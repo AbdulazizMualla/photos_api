@@ -28,4 +28,4 @@ Route::post('/photos' , 'App\Http\Controllers\Api\PhotoController@store');
 
 Route::get('/my-photos' , 'App\Http\Controllers\Api\PhotoController@myPhotos');
 
-Route::delete('/my-photos/{photo}' , 'App\Http\Controllers\Api\PhotoController@destroy');
+Route::delete('/photos/{photo}' , 'App\Http\Controllers\Api\PhotoController@destroy');
