@@ -8,6 +8,7 @@ use App\Http\Resources\UserResource;
 use App\Models\Photo;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Storage;
 
 class PhotoController extends Controller
 {
@@ -63,5 +64,33 @@ class PhotoController extends Controller
         }
         return response()->json(['message' => 'Error, try aging later'] , 500);
 
+    }
+
+
+    public function forceDelete($photoId)
+    {
+
+        $photo = Photo::withTrashed()->findOrFail($photoId);
+
+        if (auth()->id() != $photo->user_id){
+            return response()->json(['message' => 'You don\'t this resource'] , 401);
+        }
+        if ($photo->forceDelete()){
+            Storage::delete('public/photos/'.$photo->user_id.'/'.$photo->photo_name);
+            return response()->json(['message' => 'Force deleted resource successfully']);
+        }
+        return response()->json(['message' => 'Error , try aging later'] , 500);
+    }
+
+    public function deletedPhotos()
+    {
+        $user = auth()->user();
+        return response()->json(['user' => new UserResource($user->load(
+                ['photos' => function($query){
+                        $query->onlyTrashed();
+                    }, 'profile'
+                ]
+             ))
+        ]);
     }
 }

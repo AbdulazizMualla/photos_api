@@ -29,3 +29,5 @@ Route::post('/photos' , 'App\Http\Controllers\Api\PhotoController@store');
 Route::get('/my-photos' , 'App\Http\Controllers\Api\PhotoController@myPhotos');
 
 Route::delete('/photos/{photo}' , 'App\Http\Controllers\Api\PhotoController@destroy');
+Route::delete('/photos/{photo}/force-delete' , 'App\Http\Controllers\Api\PhotoController@forceDelete');
+Route::get('/deleted-photos' , 'App\Http\Controllers\Api\PhotoController@deletedPhotos');
