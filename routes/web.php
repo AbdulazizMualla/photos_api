@@ -14,5 +14,5 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return response()->json('access denied' , 404);
+    abort(404);
 });
