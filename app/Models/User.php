@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
@@ -50,5 +51,9 @@ class User extends Authenticatable
     public function photos()
     {
         return $this->hasMany(Photo::class , 'user_id');
+    }
+    public function posts(): HasMany
+    {
+        return $this->hasMany(Post::class , 'user_id');
     }
 }
