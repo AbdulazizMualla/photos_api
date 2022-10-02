@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\PostResource;
 use App\Models\Post;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
@@ -64,7 +65,7 @@ class PostController extends Controller
         }
     }
 
-    public function myPosts()
+    public function myPosts(): JsonResponse
     {
         try {
             $myPosts = Post::where('user_id' , auth()->id())->get();
@@ -74,5 +75,16 @@ class PostController extends Controller
         }
     }
 
+    public function forceDelete($postId)
+    {
+        try {
+            $post = Post::withTrashed()->find($postId);
+            if ($post->user_id != auth()->id()) throw new \Exception('You don\'t this resource' , 401);
+            $post->forceDelete();
+            return response()->json(['message' => 'post force deleted successfully']);
+        } catch (\Exception $exception){
+            return response()->json($exception , 500);
+        }
+    }
 
 }
