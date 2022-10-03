@@ -18,7 +18,8 @@ class PostResource extends JsonResource
             'id' => $this->id,
             'post_title' => $this->post_title,
             'post_body' => $this->post_body,
-            'user' => new UserResource($this->whenLoaded('user'))
+            'user' => new UserResource($this->whenLoaded('user')),
+            'comments' => CommentResource::collection($this->whenLoaded('comments'))
         ];
     }
 }

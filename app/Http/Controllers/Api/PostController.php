@@ -18,7 +18,7 @@ class PostController extends Controller
 
     public function index(): AnonymousResourceCollection
     {
-        $posts = Post::paginate(100);
+        $posts = Post::with('comments' , 'user')->paginate(100);
         return PostResource::collection($posts);
     }
 
@@ -75,7 +75,7 @@ class PostController extends Controller
         }
     }
 
-    public function forceDelete($postId)
+    public function forceDelete($postId): JsonResponse
     {
         try {
             $post = Post::withTrashed()->find($postId);
