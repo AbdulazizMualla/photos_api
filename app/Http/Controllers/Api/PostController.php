@@ -18,7 +18,7 @@ class PostController extends Controller
 
     public function index(): AnonymousResourceCollection
     {
-        $posts = Post::with('comments' , 'user')->paginate(100);
+        $posts = Post::with('comments.user.profile' , 'user.profile')->paginate(1);
         return PostResource::collection($posts);
     }
 
@@ -65,11 +65,11 @@ class PostController extends Controller
         }
     }
 
-    public function myPosts(): JsonResponse
+    public function myPosts()
     {
         try {
-            $myPosts = Post::where('user_id' , auth()->id())->get();
-            return response()->json(PostResource::collection($myPosts->load('user.profile')));
+            $myPosts = Post::with('comments.user.profile' , 'user.profile')->where('user_id' , auth()->id())->paginate(1);
+            return PostResource::collection($myPosts);
         } catch (\Exception $exception){
             return response()->json($exception , 500);
         }

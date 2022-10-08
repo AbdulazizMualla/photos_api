@@ -18,6 +18,7 @@ class PostResource extends JsonResource
             'id' => $this->id,
             'post_title' => $this->post_title,
             'post_body' => $this->post_body,
+            'created_at' => $this->created_at,
             'user' => new UserResource($this->whenLoaded('user')),
             'comments' => CommentResource::collection($this->whenLoaded('comments'))
         ];
