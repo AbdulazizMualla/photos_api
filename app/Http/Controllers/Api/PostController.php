@@ -18,7 +18,7 @@ class PostController extends Controller
 
     public function index(): AnonymousResourceCollection
     {
-        $posts = Post::with('comments.user.profile' , 'user.profile')->paginate(1);
+        $posts = Post::with('comments.user.profile' , 'user.profile')->paginate(100);
         return PostResource::collection($posts);
     }
 
@@ -54,11 +54,12 @@ class PostController extends Controller
         }
     }
 
-    public function destroy(Post $post)
+    public function destroy($postId)
     {
         try {
+            $post = Post::withTrashed()->where('id' , $postId)->first();
             if ($post->user_id != auth()->id()) throw new \Exception('You don\'t this resource' , 401);
-            $post->delete();
+            $post->deleted_at != null ? $post->forceDelete() : $post->delete();
             return response()->json(['message' => 'post deleted successfully']);
         } catch (\Exception $exception){
             return response()->json($exception , 500);
@@ -68,10 +69,20 @@ class PostController extends Controller
     public function myPosts()
     {
         try {
-            $myPosts = Post::with('comments.user.profile' , 'user.profile')->where('user_id' , auth()->id())->paginate(1);
+            $myPosts = Post::with('comments.user.profile' , 'user.profile')->where('user_id' , auth()->id())->paginate(100);
             return PostResource::collection($myPosts);
         } catch (\Exception $exception){
             return response()->json($exception , 500);
+        }
+    }
+
+    public function myPostDeleted()
+    {
+        try {
+            $myPostDeleted = Post::onlyTrashed()->with('user.profile')->where('user_id' , auth()->id())->paginate(100);
+            return PostResource::collection($myPostDeleted);
+        } catch (\Exception $exception){
+
         }
     }
 
@@ -86,5 +97,6 @@ class PostController extends Controller
             return response()->json($exception , 500);
         }
     }
+
 
 }

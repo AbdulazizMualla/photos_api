@@ -34,5 +34,7 @@ Route::delete('/photos/{photo}/force-delete' , 'App\Http\Controllers\Api\PhotoCo
 Route::get('/deleted-photos' , 'App\Http\Controllers\Api\PhotoController@deletedPhotos');
 
 Route::get('/my-posts' , [PostController::class , 'myPosts']);
+Route::get('/my-posts/deleted' , [PostController::class , 'myPostDeleted']);
 Route::resource('posts' , 'App\Http\Controllers\Api\PostController');
 Route::delete('posts/{post}/force-delete' , [PostController::class , 'forceDelete']);
+Route::delete('/posts/{post}/force-delete' , [PostController::class , 'forceDelete']);
