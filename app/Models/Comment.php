@@ -11,7 +11,7 @@ class Comment extends Model
 {
     use HasFactory , SoftDeletes;
 
-    protected $fillable = ['comment_body'];
+    protected $fillable = ['comment_body' , 'post_id'];
 
     public function post(): BelongsTo
     {

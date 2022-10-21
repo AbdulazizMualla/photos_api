@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\CommentController;
 use App\Http\Controllers\Api\PostController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -38,3 +39,4 @@ Route::get('/my-posts/deleted' , [PostController::class , 'myPostDeleted']);
 Route::resource('posts' , 'App\Http\Controllers\Api\PostController');
 Route::delete('posts/{post}/force-delete' , [PostController::class , 'forceDelete']);
 Route::delete('/posts/{post}/force-delete' , [PostController::class , 'forceDelete']);
+Route::post('/comments' , [CommentController::class , 'store']);
