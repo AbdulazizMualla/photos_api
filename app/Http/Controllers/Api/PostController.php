@@ -82,7 +82,7 @@ class PostController extends Controller
             $myPostDeleted = Post::onlyTrashed()->with('user.profile')->where('user_id' , auth()->id())->paginate(100);
             return PostResource::collection($myPostDeleted);
         } catch (\Exception $exception){
-
+            return response()->json($exception , 500);
         }
     }
 
