@@ -19,7 +19,9 @@ class UserResource extends JsonResource
             'name' => $this->name,
             'email' => $this->email,
             'profile' => new ProfileResource($this->whenLoaded('profile')),
-            'photos' => PhotoResource::collection($this->whenLoaded('photos'))
+            'photos' => PhotoResource::collection($this->whenLoaded('photos')),
+            'posts' => PostResource::collection($this->whenLoaded('posts')),
+            'comment' => CommentResource::collection($this->whenLoaded('comment'))
         ];
     }
 }

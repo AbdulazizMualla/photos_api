@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Api\CommentController;
+use App\Http\Controllers\Api\PostController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -31,3 +33,10 @@ Route::get('/my-photos' , 'App\Http\Controllers\Api\PhotoController@myPhotos');
 Route::delete('/photos/{photo}' , 'App\Http\Controllers\Api\PhotoController@destroy');
 Route::delete('/photos/{photo}/force-delete' , 'App\Http\Controllers\Api\PhotoController@forceDelete');
 Route::get('/deleted-photos' , 'App\Http\Controllers\Api\PhotoController@deletedPhotos');
+
+Route::get('/my-posts' , [PostController::class , 'myPosts']);
+Route::get('/my-posts/deleted' , [PostController::class , 'myPostDeleted']);
+Route::resource('posts' , 'App\Http\Controllers\Api\PostController');
+Route::delete('posts/{post}/force-delete' , [PostController::class , 'forceDelete']);
+Route::delete('/posts/{post}/force-delete' , [PostController::class , 'forceDelete']);
+Route::post('/comments' , [CommentController::class , 'store']);
